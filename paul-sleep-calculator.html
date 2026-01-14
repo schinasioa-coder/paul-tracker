@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paul's Daily Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --baby-blue: #6BB6FF;
+            --light-blue: #B3D9FF;
+            --sky: #E6F3FF;
+            --navy: #1E3A5F;
+            --mint: #A8E6CF;
+            --sunshine: #FFD93D;
+            --peach: #FFAB91;
+            --white: #FFFFFF;
+            --gray: #F0F4F8;
+            --text: #2C3E50;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #E6F3FF 0%, #B3D9FF 50%, #A8E6CF 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text);
+            position: relative;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+
+        /* Cute background decorations */
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        body::before {
+            width: 300px;
+            height: 300px;
+            background: var(--baby-blue);
+            top: -100px;
+            right: -100px;
+        }
+
+        body::after {
+            width: 250px;
+            height: 250px;
+            background: var(--mint);
+            bottom: -80px;
+            left: -80px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: bounceIn 1s ease;
+        }
+
+        .header-emoji {
+            font-size: 4rem;
+            margin-bottom: 10px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .header h1 {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--baby-blue), var(--navy));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: var(--navy);
+            opacity: 0.8;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(107, 182, 255, 0.15);
+            animation: slideUp 0.6s ease;
+            animation-fill-mode: both;
+            border: 3px solid var(--light-blue);
+            width: 100%;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .card:nth-child(2) { animation-delay: 0.1s; }
+        .card:nth-child(3) { animation-delay: 0.2s; }
+        .card:nth-child(4) { animation-delay: 0.3s; }
+        .card:nth-child(5) { animation-delay: 0.4s; }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px dashed var(--light-blue);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            filter: drop-shadow(2px 2px 4px rgba(107, 182, 255, 0.3));
+        }
+
+        .card-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+            width: 100%;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--navy);
+            font-size: 0.95rem;
+        }
+
+        input[type="time"],
+        input[type="number"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--light-blue);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Nunito', sans-serif;
+            transition: all 0.3s ease;
+            background: var(--sky);
+            color: var(--navy);
+            font-weight: 600;
+        }
+
+        input[type="time"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--baby-blue);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(107, 182, 255, 0.15);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--baby-blue), var(--navy));
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Quicksand', sans-serif;
+            box-shadow: 0 4px 15px rgba(107, 182, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(107, 182, 255, 0.5);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            width: auto;
+        }
+
+        .btn-delete {
+            background: linear-gradient(135deg, #FF6B6B, #C44569);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 35px;
+            padding-right: 0;
+            max-width: 100%;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--baby-blue), var(--mint));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 24px;
+            background: var(--sky);
+            padding: 16px;
+            border-radius: 12px;
+            border-left: 4px solid var(--baby-blue);
+            animation: slideInLeft 0.5s ease;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            word-wrap: break-word;
+            overflow: hidden;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -39px;
+            top: 20px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: white;
+            border: 4px solid var(--baby-blue);
+            box-shadow: 0 0 0 4px rgba(107, 182, 255, 0.2);
+        }
+
+        .timeline-item.sleep::before {
+            border-color: var(--navy);
+        }
+
+        .timeline-item.feed::before {
+            border-color: var(--mint);
+        }
+
+        .timeline-time {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--baby-blue);
+            margin-bottom: 4px;
+        }
+
+        .timeline-label {
+            font-size: 1rem;
+            color: var(--navy);
+            font-weight: 600;
+        }
+
+        .timeline-detail {
+            font-size: 0.9rem;
+            color: var(--text);
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+
+        .log-entry {
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 2px solid var(--light-blue);
+            animation: fadeIn 0.4s ease;
+        }
+
+        .log-info {
+            flex: 1;
+        }
+
+        .log-time {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--baby-blue);
+            margin-bottom: 4px;
+        }
+
+        .log-amount {
+            font-size: 1rem;
+            color: var(--navy);
+            font-weight: 600;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, var(--sky), white);
+            padding: 20px;
+            border-radius: 14px;
+            text-align: center;
+            border: 2px solid var(--baby-blue);
+            box-sizing: border-box;
+        }
+
+        .stat-value {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--baby-blue);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--navy);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--navy);
+            opacity: 0.6;
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+            background: white;
+            padding: 8px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(107, 182, 255, 0.15);
+            border: 2px solid var(--light-blue);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 14px 20px;
+            background: transparent;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--navy);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .tab:hover {
+            background: var(--sky);
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, var(--baby-blue), var(--navy));
+            color: white;
+            box-shadow: 0 4px 12px rgba(107, 182, 255, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Age Counter */
+        .age-display {
+            background: linear-gradient(135deg, var(--baby-blue), var(--navy));
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            color: white;
+            margin-bottom: 24px;
+        }
+
+        .age-number {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .age-label {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            font-weight: 600;
+        }
+
+        .birthday-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 24px;
+            width: 100%;
+        }
+
+        .birthday-box {
+            background: white;
+            padding: 28px;
+            border-radius: 16px;
+            text-align: center;
+            border: 3px solid var(--light-blue);
+            box-shadow: 0 4px 12px rgba(107, 182, 255, 0.15);
+            box-sizing: border-box;
+        }
+
+        .birthday-box-icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        .birthday-value {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--baby-blue);
+            margin-bottom: 8px;
+        }
+
+        .birthday-label {
+            font-size: 1rem;
+            color: var(--navy);
+            font-weight: 600;
+        }
+
+        .milestone-card {
+            background: linear-gradient(135deg, var(--sky), white);
+            padding: 20px;
+            border-radius: 14px;
+            margin-bottom: 16px;
+            border-left: 4px solid var(--mint);
+        }
+
+        .milestone-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 8px;
+        }
+
+        .milestone-desc {
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .header-emoji {
+                font-size: 3rem;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .input-row {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline {
+                padding-left: 35px;
+                padding-right: 0;
+            }
+
+            .timeline::before {
+                left: 12px;
+            }
+
+            .timeline-item::before {
+                left: -39px;
+            }
+
+            .age-number {
+                font-size: 2.5rem;
+            }
+
+            .birthday-value {
+                font-size: 2rem;
+            }
+
+            .tabs {
+                gap: 8px;
+                padding: 6px;
+            }
+
+            .tab {
+                padding: 12px 16px;
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-emoji">👶🏻</div>
+            <h1>Paul's Daily Tracker</h1>
+            <p>Sleep & Feeding Schedule</p>
+        </div>
+
+        <!-- Tabs Navigation -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('schedule')">📅 Schedule</button>
+            <button class="tab" onclick="switchTab('age')">🎂 Age & Birthday</button>
+        </div>
+
+        <!-- Schedule Tab -->
+        <div id="scheduleTab" class="tab-content active">
+
+        <!-- Day Planner -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-icon">☀️</span>
+                <h2 class="card-title">Start Your Day</h2>
+            </div>
+            <div class="input-group">
+                <label for="wakeTime">What time did Paul wake up today?</label>
+                <input type="time" id="wakeTime" value="07:00">
+            </div>
+            <button class="btn" onclick="generateSchedule()">Generate Today's Schedule</button>
+            
+            <div style="margin-top: 32px; padding-top: 24px; border-top: 2px dashed var(--light-blue);">
+                <div class="input-group">
+                    <label for="adjustTime">🔄 Adjust Schedule - Paul's Last Wake Up Time</label>
+                    <input type="time" id="adjustTime" placeholder="Use this if schedule changed">
+                </div>
+                <button class="btn" onclick="adjustSchedule()" style="background: linear-gradient(135deg, var(--mint), var(--baby-blue));">
+                    Re-adjust Schedule from This Time
+                </button>
+            </div>
+        </div>
+
+        <!-- Daily Schedule -->
+        <div class="card" id="scheduleCard" style="display: none;">
+            <div class="card-header">
+                <span class="card-icon">📅</span>
+                <h2 class="card-title">Today's Schedule</h2>
+            </div>
+            <div id="schedule" class="timeline" style="overflow-x: hidden;"></div>
+        </div>
+
+        <!-- Feeding Log -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-icon">🍼</span>
+                <h2 class="card-title">Feeding Log</h2>
+            </div>
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="feedTime">Time</label>
+                    <input type="time" id="feedTime">
+                </div>
+                <div class="input-group">
+                    <label for="feedAmount">Amount (ml)</label>
+                    <input type="number" id="feedAmount" min="0" placeholder="150">
+                </div>
+            </div>
+            <button class="btn" onclick="addFeeding()">Log Feeding</button>
+
+            <div id="feedingLog" style="margin-top: 24px;"></div>
+
+            <div class="stats-grid" id="feedingStats" style="display: none;">
+                <div class="stat-box">
+                    <div class="stat-value" id="totalFeedings">0</div>
+                    <div class="stat-label">Feedings</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="totalMl">0</div>
+                    <div class="stat-label">Total ml</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="avgMl">0</div>
+                    <div class="stat-label">Avg ml</div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Age & Birthday Tab -->
+        <div id="ageTab" class="tab-content">
+            <!-- Age Display -->
+            <div class="card">
+                <div class="age-display">
+                    <div class="age-number" id="ageDisplay">Loading...</div>
+                    <div class="age-label">Paul's Age</div>
+                </div>
+
+                <div class="birthday-grid">
+                    <div class="birthday-box">
+                        <div class="birthday-box-icon">📆</div>
+                        <div class="birthday-value" id="daysOld">0</div>
+                        <div class="birthday-label">Days Old</div>
+                    </div>
+                    <div class="birthday-box">
+                        <div class="birthday-box-icon">📅</div>
+                        <div class="birthday-value" id="weeksOld">0</div>
+                        <div class="birthday-label">Weeks Old</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Birthday Countdown -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">🎉</span>
+                    <h2 class="card-title">Next Birthday Countdown</h2>
+                </div>
+                
+                <div class="birthday-grid">
+                    <div class="birthday-box">
+                        <div class="birthday-box-icon">🎂</div>
+                        <div class="birthday-value" id="daysUntil">0</div>
+                        <div class="birthday-label">Days Until Birthday</div>
+                    </div>
+                    <div class="birthday-box">
+                        <div class="birthday-box-icon">🎈</div>
+                        <div class="birthday-value" id="nextBirthday">Sept 12, 2026</div>
+                        <div class="birthday-label">Next Birthday</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Milestones -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">⭐</span>
+                    <h2 class="card-title">Milestones & Info</h2>
+                </div>
+                
+                <div class="milestone-card">
+                    <div class="milestone-title">🎂 Birthday: September 12, 2025</div>
+                    <div class="milestone-desc">Paul was born on this special day!</div>
+                </div>
+
+                <div class="milestone-card" id="upcomingMilestone">
+                    <div class="milestone-title">🎯 Upcoming Milestone</div>
+                    <div class="milestone-desc" id="milestoneText">Loading...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Paul's birthday
+        const BIRTHDAY = new Date('2025-09-12');
+
+        // Paul's schedule rules
+        const RULES = {
+            sleepCycle: 4 * 60, // 4 hours in minutes
+            awakeWindow: 2 * 60, // 2 hours in minutes
+            feedingTime: 30, // 30 minutes
+        };
+
+        let feedings = [];
+
+        // Load feedings from localStorage
+        function loadFeedings() {
+            const saved = localStorage.getItem('paulFeedings');
+            if (saved) {
+                feedings = JSON.parse(saved);
+            }
+        }
+
+        // Save feedings to localStorage
+        function saveFeedings() {
+            localStorage.setItem('paulFeedings', JSON.stringify(feedings));
+        }
+
+        // Tab switching
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            if (tabName === 'schedule') {
+                document.getElementById('scheduleTab').classList.add('active');
+            } else if (tabName === 'age') {
+                document.getElementById('ageTab').classList.add('active');
+                updateAgeDisplay();
+            }
+        }
+
+        // Age calculation and display
+        function updateAgeDisplay() {
+            const now = new Date();
+            const birthDate = new Date(BIRTHDAY);
+
+            // Calculate age in months and days
+            let years = now.getFullYear() - birthDate.getFullYear();
+            let months = now.getMonth() - birthDate.getMonth();
+            let days = now.getDate() - birthDate.getDate();
+
+            if (days < 0) {
+                months--;
+                const lastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+                days += lastMonth.getDate();
+            }
+
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+
+            // Display age
+            let ageText = '';
+            if (years > 0) {
+                ageText = `${years} year${years > 1 ? 's' : ''} `;
+            }
+            if (months > 0 || years > 0) {
+                ageText += `${months} month${months !== 1 ? 's' : ''} `;
+            }
+            ageText += `${days} day${days !== 1 ? 's' : ''}`;
+
+            document.getElementById('ageDisplay').textContent = ageText;
+
+            // Calculate total days old
+            const diffTime = Math.abs(now - birthDate);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            const diffWeeks = Math.floor(diffDays / 7);
+
+            document.getElementById('daysOld').textContent = diffDays;
+            document.getElementById('weeksOld').textContent = diffWeeks;
+
+            // Calculate next birthday
+            let nextBirthday = new Date(now.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+            if (nextBirthday < now) {
+                nextBirthday = new Date(now.getFullYear() + 1, birthDate.getMonth(), birthDate.getDate());
+            }
+
+            const daysUntilBirthday = Math.ceil((nextBirthday - now) / (1000 * 60 * 60 * 24));
+            document.getElementById('daysUntil').textContent = daysUntilBirthday;
+
+            const nextBirthdayStr = nextBirthday.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric', 
+                year: 'numeric' 
+            });
+            document.getElementById('nextBirthday').textContent = nextBirthdayStr;
+
+            // Upcoming milestone
+            updateMilestone(months);
+        }
+
+        function updateMilestone(currentMonths) {
+            const milestones = [
+                { month: 1, text: '1 Month - First smiles and better head control' },
+                { month: 2, text: '2 Months - Cooing and tracking objects with eyes' },
+                { month: 3, text: '3 Months - Reaching for toys and laughing' },
+                { month: 4, text: '4 Months - Rolling over and babbling' },
+                { month: 5, text: '5 Months - Sitting with support' },
+                { month: 6, text: '6 Months - Starting solid foods' },
+                { month: 7, text: '7 Months - Sitting independently' },
+                { month: 8, text: '8 Months - Crawling begins' },
+                { month: 9, text: '9 Months - Pulling up to stand' },
+                { month: 10, text: '10 Months - Waving bye-bye' },
+                { month: 11, text: '11 Months - First steps may happen' },
+                { month: 12, text: '12 Months - First Birthday! Walking may begin' },
+                { month: 18, text: '18 Months - Running and climbing' },
+                { month: 24, text: '2 Years - Full sentences and potty training' }
+            ];
+
+            const nextMilestone = milestones.find(m => m.month > currentMonths);
+            
+            if (nextMilestone) {
+                const monthsUntil = nextMilestone.month - currentMonths;
+                document.getElementById('milestoneText').textContent = 
+                    `In ${monthsUntil} month${monthsUntil > 1 ? 's' : ''}: ${nextMilestone.text}`;
+            } else {
+                document.getElementById('milestoneText').textContent = 
+                    'Keep growing strong! Every day brings new discoveries.';
+            }
+        }
+
+        function setDefaultTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('feedTime').value = `${hours}:${minutes}`;
+        }
+
+        function generateSchedule() {
+            const wakeTimeInput = document.getElementById('wakeTime').value;
+            if (!wakeTimeInput) {
+                alert('Please enter wake up time');
+                return;
+            }
+
+            const [hours, minutes] = wakeTimeInput.split(':').map(Number);
+            const startTime = hours * 60 + minutes; // Convert to minutes from midnight
+
+            buildSchedule(startTime, 'Generated schedule for the day starting at ' + wakeTimeInput);
+        }
+
+        function adjustSchedule() {
+            const adjustTimeInput = document.getElementById('adjustTime').value;
+            if (!adjustTimeInput) {
+                alert('Please enter the last wake up time');
+                return;
+            }
+
+            const [hours, minutes] = adjustTimeInput.split(':').map(Number);
+            const startTime = hours * 60 + minutes;
+
+            buildSchedule(startTime, '🔄 Schedule adjusted from last wake time: ' + adjustTimeInput);
+        }
+
+        function buildSchedule(startTime, headerMessage) {
+            let currentTime = startTime;
+
+            const scheduleDiv = document.getElementById('schedule');
+            scheduleDiv.innerHTML = '';
+
+            const events = [];
+
+            // Generate schedule for the day (until midnight or 8 cycles)
+            for (let cycle = 0; cycle < 8; cycle++) {
+                const startOfDay = currentTime;
+                
+                // Wake/Start of awake window
+                events.push({
+                    time: currentTime,
+                    type: 'wake',
+                    label: cycle === 0 ? 'Wake Up' : 'Wake Up',
+                    icon: '☀️'
+                });
+
+                // Feeding (after waking up)
+                currentTime += 10; // Small buffer for feeding to start
+                events.push({
+                    time: currentTime,
+                    type: 'feed',
+                    label: 'Feeding Time',
+                    icon: '🍼',
+                    duration: RULES.feedingTime
+                });
+                currentTime += RULES.feedingTime;
+
+                // Awake/Play time
+                const remainingAwakeTime = RULES.awakeWindow - RULES.feedingTime - 10;
+                events.push({
+                    time: currentTime,
+                    type: 'play',
+                    label: 'Awake & Play',
+                    icon: '🎈',
+                    duration: remainingAwakeTime
+                });
+                currentTime += remainingAwakeTime;
+
+                // Sleep time
+                const sleepDuration = RULES.sleepCycle - RULES.awakeWindow;
+                events.push({
+                    time: currentTime,
+                    type: 'sleep',
+                    label: 'Sleep Time',
+                    icon: '😴',
+                    duration: sleepDuration
+                });
+                currentTime += sleepDuration;
+
+                // Stop if we've gone past midnight
+                if (currentTime >= 24 * 60) break;
+            }
+
+            // Add header message if provided
+            let scheduleHTML = '';
+            if (headerMessage) {
+                scheduleHTML = `
+                    <div style="background: linear-gradient(135deg, var(--mint), var(--sky)); padding: 12px; border-radius: 10px; margin-bottom: 20px; margin-left: -35px; padding-left: 47px; text-align: left; font-weight: 600; color: var(--navy); font-size: 0.9rem;">
+                        ${headerMessage}
+                    </div>
+                `;
+            }
+
+            // Display events
+            events.forEach((event, index) => {
+                const timeStr = formatMinutesToTime(event.time);
+                const endTimeStr = event.duration ? formatMinutesToTime(event.time + event.duration) : '';
+                
+                const itemClass = event.type === 'sleep' ? 'sleep' : (event.type === 'feed' ? 'feed' : '');
+                
+                scheduleHTML += `
+                    <div class="timeline-item ${itemClass}">
+                        <div class="timeline-time">${event.icon} ${timeStr}</div>
+                        <div class="timeline-label">${event.label}</div>
+                        ${event.duration ? `<div class="timeline-detail">Duration: ${event.duration} min ${endTimeStr ? `(until ${endTimeStr})` : ''}</div>` : ''}
+                    </div>
+                `;
+            });
+
+            scheduleDiv.innerHTML = scheduleHTML;
+            document.getElementById('scheduleCard').style.display = 'block';
+        }
+
+        function formatMinutesToTime(minutes) {
+            const h = Math.floor(minutes / 60);
+            const m = minutes % 60;
+            return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+        }
+
+        function addFeeding() {
+            const timeInput = document.getElementById('feedTime').value;
+            const amountInput = document.getElementById('feedAmount').value;
+
+            if (!timeInput || !amountInput) {
+                alert('Please fill in both time and amount');
+                return;
+            }
+
+            const feeding = {
+                time: timeInput,
+                amount: parseInt(amountInput),
+                timestamp: new Date().getTime()
+            };
+
+            feedings.push(feeding);
+            feedings.sort((a, b) => {
+                const [aH, aM] = a.time.split(':').map(Number);
+                const [bH, bM] = b.time.split(':').map(Number);
+                return (aH * 60 + aM) - (bH * 60 + bM);
+            });
+
+            saveFeedings(); // Save to localStorage
+            displayFeedings();
+            updateStats();
+
+            // Clear inputs
+            document.getElementById('feedAmount').value = '';
+            setDefaultTime();
+        }
+
+        function deleteFeeding(timestamp) {
+            feedings = feedings.filter(f => f.timestamp !== timestamp);
+            saveFeedings(); // Save to localStorage
+            displayFeedings();
+            updateStats();
+        }
+
+        function displayFeedings() {
+            const logDiv = document.getElementById('feedingLog');
+
+            if (feedings.length === 0) {
+                logDiv.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🍼</div>
+                        <p>No feedings logged yet today</p>
+                    </div>
+                `;
+                return;
+            }
+
+            logDiv.innerHTML = feedings.map(f => `
+                <div class="log-entry">
+                    <div class="log-info">
+                        <div class="log-time">🍼 ${f.time}</div>
+                        <div class="log-amount">${f.amount} ml</div>
+                    </div>
+                    <button class="btn btn-small btn-delete" onclick="deleteFeeding(${f.timestamp})">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function updateStats() {
+            const statsDiv = document.getElementById('feedingStats');
+            
+            if (feedings.length === 0) {
+                statsDiv.style.display = 'none';
+                return;
+            }
+
+            statsDiv.style.display = 'grid';
+
+            const totalMl = feedings.reduce((sum, f) => sum + f.amount, 0);
+            const avgMl = Math.round(totalMl / feedings.length);
+
+            document.getElementById('totalFeedings').textContent = feedings.length;
+            document.getElementById('totalMl').textContent = totalMl;
+            document.getElementById('avgMl').textContent = avgMl;
+        }
+
+        // Initialize
+        window.addEventListener('load', () => {
+            loadFeedings(); // Load saved feedings first
+            setDefaultTime();
+            displayFeedings();
+            updateStats();
+            updateAgeDisplay();
+            
+            // Update age every minute
+            setInterval(updateAgeDisplay, 60000);
+        });
+    </script>
+</body>
+</html>
